@@ -3,6 +3,7 @@ var ht;
 
 var shape;
 var pen_down;
+var cursor;
 
 var color;
 var size;
@@ -26,6 +27,13 @@ function handleMouseMove(evt) {
   }
   old_x = new_x;
   old_y = new_y;
+  
+  cursor.x = new_x;
+  cursor.y = new_y;
+
+  if (!pen_down) {
+    old_x = undefined;
+  }
 }
 
 function init() {
@@ -38,14 +46,18 @@ function init() {
   pen_down = false;
   
   shape = new createjs.Shape();
+  stage.addChild(shape);
   color = "#0FF"; // createjs.Graphics.getHSL(180, 100, 50);
   size = 10;
 
   var label = new createjs.Text("just paint", "24px Arial");
   label.x = 10;
   label.y = 10;
-  // nothing works unless this is done
-  stage.addChild(shape, label);
+  //stage.addChild(label);
+
+  cursor = new createjs.Shape();
+  cursor.graphics.beginFill("red").drawCircle(0, 0, 10);
+  stage.addChild(cursor);
 
   var context = stage.canvas.getContext("2d");
   context.imageSmoothingEnabled = false;
