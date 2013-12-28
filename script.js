@@ -2,6 +2,7 @@ var wd;
 var ht;
 
 var shape;
+var pen_down;
 
 var color;
 var size;
@@ -14,7 +15,8 @@ function handleMouseMove(evt) {
   
   new_x = evt.stageX;
   new_y = evt.stageY;
-  if (old_x) {
+  
+  if (pen_down && old_x) {
     shape.graphics.beginStroke(color)
         .setStrokeStyle(size, "round")
         .moveTo(old_x, old_y)
@@ -32,6 +34,8 @@ function init() {
 
   wd = stage.canvas.width;
   ht = stage.canvas.height;
+
+  pen_down = false;
   
   shape = new createjs.Shape();
   color = "#0FF"; // createjs.Graphics.getHSL(180, 100, 50);
@@ -47,6 +51,10 @@ function init() {
   context.imageSmoothingEnabled = false;
   context.mozImageSmoothingEnabled = false;
   context.webkitImageSmoothingEnabled = false;
+  
+  stage.on("stagemousedown", function(event) {
+    pen_down = !pen_down;
+  });
 
   stage.on("stagemousemove", handleMouseMove);
   stage.update();
